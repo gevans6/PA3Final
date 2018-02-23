@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript">
+        function StartCrawling() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/BeginCrawling',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById("stop").style.visibility = "visible";
+                    document.getElementById("start").style.visibility = "hidden";
+                    console.log("success");
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function StopCrawling() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/StopCrawling',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById("start").style.visibility = "visible";
+                    document.getElementById("stop").style.visibility = "hidden";
+                    console.log("success");
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function ReadTop10() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/ReadLinksFromTableStorage',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    $("#last10crawled").html("Last 10 URLS Crawled: ");
+                    $("#last10crawled").append("<br/>");
+                    for (i = 0; i < 10; i++) {
+                        $("#last10crawled").append(data.d[i]);
+                        $("#last10crawled").append("<br/>");
+                        $("#last10crawled").append("<br/>");
+                    }
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(ReadTop10, 500);
+
+        function GetErrors() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetErrors',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log("error: " + data);
+                    $("#last10errors").html("Last 10 Errors:");
+                    $("#last10errors").append("<br/>");
+                    for (i = 0; i < 10; i++) {
+                        $("#last10errors").append(data.d[i]);
+                        $("#last10errors").append("<br/>");
+                        $("#last10errors").append("<br/>");
+                    }
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetErrors, 500);
+
+        function GetTitleLinkDate() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetTitleLinkDate',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ url: $("#search").val() }),
+                success: function (data) {
+                    $("#searchresult").html("");
+                    $("#searchresult").append("Title: " + JSON.stringify(data.d[0]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("URL: " + JSON.stringify(data.d[1]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("Date: " + JSON.stringify(data.d[2]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("<br/>");
+                    console.log("link title: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function GetCPU() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetCPU',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#cpu").html("CPU: " + JSON.stringify(data.d));
+                    console.log("cpu: " + JSON.stringify(data));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetCPU, 500);
+
+        function GetRAM() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetRAM',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#ram").html("RAM: " + JSON.stringify(data.d));
+                    console.log("ram: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetRAM, 500);
+
+        function GetSizeQueue() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetSizeQueue',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#sizequeue").html("Size of Queue: " + JSON.stringify(data.d));
+                    console.log("queue: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetSizeQueue, 500);
+
+        function GetSizeIndex() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetSizeIndex',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#sizeindex").html("Size of Index: " + JSON.stringify(data.d));
+                    console.log("index: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetSizeIndex, 500);
+
+        function GetNumCrawled() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetNumCrawled',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#numcrawled").html("Number of URLs Crawled: " + JSON.stringify(data.d));
+                    console.log("num: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetNumCrawled, 500);
+
+        function GetStatus() {
+            $.ajax({
+                type: "POST",
+                url: 'WebService1.asmx/GetStatus',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#status").html("Status: " + JSON.stringify(data.d));
+                    console.log("Status: " + JSON.stringify(data.d));
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        setInterval(GetStatus, 500);
+
+    </script>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <header>     
+        <input value="Start Crawling" type="button" id="start" onclick="StartCrawling()"><br />
+        <input value="Stop Crawling" type="button" id="stop" style="visibility: hidden" onclick="StopCrawling()"><br />
+
+        <div class="row">
+            <div class="col">
+                <div class="container" id="status">Status: </div>
+                <br />
+                <div class="container" id="cpu">CPU: </div>
+                <br />
+                <div class="container" id="ram">RAM: </div>
+                <br />
+                <div class="container" id="numcrawled">Number of URLs Crawled: </div>
+                <br />
+                <div class="container" id="sizeindex">Size of Index: </div>
+                <br />
+                <div class="container" id="sizequeue">Size of Queue: </div>
+                <br />
+            </div>
+        </div>       
+</header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div id="Search URL">Search a URL:</div>
+                    <form>
+                        <input placeholder="Search" type="text" id="search">
+                        <input value="Search" type="button" id="submit" onclick="GetTitleLinkDate()"><br />
+                    </form>
+                    <div id="searchresult"></div>
+                </div>
+                <div class="col">
+                    <div id="last10crawled">Last 10 URLS Crawled: </div>
+                </div>
+
+                <div class="col">
+                    <div id="last10errors">Last 10 Errors:</div>
+                </div>              
+                <div class="=" w-100"></div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
