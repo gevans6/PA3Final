@@ -4,6 +4,10 @@ Link to Github repo: https://github.com/gevans6/PA3Final
 
 Link to WebCrawler CloudApp: http://webcrawlerpa3.cloudapp.net/
 
+Azure Dashboard:
+
+![azure](https://github.com/gevans6/PA3Final/blob/master/azure-compute.PNG)
+
 The state of the worker role is shown on the dashboard using a a performance table that is updating whenever an item is put into a queue, table, or the program reaches the top of the while loop of the Run() function.
 
 Machine counters are also stored in this table. 
